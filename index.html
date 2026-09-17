@@ -3,36 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IV Koniugacja: Повний довідник та тренажер</title>
+    <title>Польська мова: Довідник та Тренажери</title>
     <style>
-        :root { --primary: #e74c3c; --secondary: #2c3e50; --bg: #f4f7f6; --success: #27ae60; --blue: #3498db; --gold: #f1c40f; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; color: #333; line-height: 1.6; }
+        :root { 
+            --primary: #e74c3c; 
+            --secondary: #2c3e50; 
+            --bg: #f4f7f6; 
+            --success: #27ae60; 
+            --blue: #3498db; 
+            --gold: #f1c40f;
+            --male: #3498db;
+            --female: #e91e63;
+            --neutral: #9b59b6;
+        }
         
-        header { background: var(--secondary); color: white; padding: 40px 20px; text-align: center; border-bottom: 5px solid var(--primary); }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; color: #333; line-height: 1.6; scroll-behavior: smooth; }
+        
+        /* Навігація */
+        nav { background: var(--secondary); position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .nav-container { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; flex-wrap: wrap; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 20px; font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: var(--gold); }
+        
+        /* Голосові налаштування */
+        .voice-settings { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #ccc; }
+        .voice-settings select, .voice-settings input { padding: 5px; border-radius: 4px; border: 1px solid #555; background: #444; color: white; }
+        .voice-settings label { display: flex; align-items: center; gap: 5px; cursor: pointer; }
+
+        header { background: var(--secondary); color: white; padding: 60px 20px 40px; text-align: center; border-bottom: 5px solid var(--primary); }
         .container { max-width: 1000px; margin: -40px auto 40px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         
+        h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 40px; color: var(--secondary); }
+        h2:first-child { margin-top: 0; }
+
+        /* Секція теорії */
         .theory-box { background: #fff3f3; border-left: 5px solid var(--primary); padding: 20px; margin: 20px 0; border-radius: 8px; }
         .full-list-box { background: #eef2f7; padding: 20px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #d1d9e6; }
         .suffix { color: var(--primary); font-weight: bold; }
 
-        /* Список дієслів */
+        /* Секція дієслів */
         .verb-selection { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 25px 0; }
         .verb-item { display: flex; align-items: center; background: #f9f9f9; padding: 12px; border-radius: 8px; cursor: pointer; border: 1px solid #eee; transition: 0.2s; }
         .verb-item:hover { border-color: var(--primary); background: #fff; }
         .verb-item input { margin-right: 12px; width: 18px; height: 18px; cursor: pointer; }
 
+        /* Кнопки */
         .btn-group { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
         .btn-main { flex: 2; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 18px; cursor: pointer; font-weight: bold; transition: 0.3s; min-width: 250px; }
         .btn-random { flex: 1; background: var(--success); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; min-width: 150px; }
         .btn-challenge { flex: 1; background: var(--gold); color: #333; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; min-width: 150px; }
         .btn-main:hover, .btn-random:hover, .btn-challenge:hover { opacity: 0.9; transform: translateY(-2px); }
 
+        /* --- ВПРАВА З РОДАМИ --- */
+        .gender-exercise { margin-top: 20px; }
+        .gender-bank { display: flex; flex-wrap: wrap; gap: 10px; padding: 20px; background: #f0f2f5; border-radius: 10px; min-height: 100px; margin-bottom: 20px; border: 2px dashed #ccc; }
+        .gender-word { padding: 8px 16px; background: white; border: 2px solid var(--secondary); border-radius: 20px; cursor: grab; font-weight: 500; font-size: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); user-select: none; }
+        .gender-word:active { cursor: grabbing; }
+        
+        .gender-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+        .gender-col { background: #fff; border-radius: 10px; overflow: hidden; border: 1px solid #ddd; display: flex; flex-direction: column; }
+        
+        .gender-header { padding: 15px; color: white; text-align: center; font-weight: bold; }
+        .header-m { background: var(--male); }
+        .header-f { background: var(--female); }
+        .header-n { background: var(--neutral); }
+        
+        .gender-dropzone { flex-grow: 1; padding: 10px; min-height: 300px; display: flex; flex-direction: column; gap: 8px; transition: background 0.2s; }
+        .gender-dropzone.drag-over { background: #e3f2fd; }
+        
+        .dropped-item { padding: 8px; background: #f8f9fa; border-radius: 6px; border: 1px solid #eee; text-align: center; font-size: 15px; animation: pop 0.3s ease; }
+        .dropped-item.correct { background: #d4edda; border-color: var(--success); color: #155724; }
+        .dropped-item.wrong { background: #f8d7da; border-color: var(--primary); color: #721c24; }
+
+        @keyframes pop { 0% { transform: scale(0.8); } 100% { transform: scale(1); } }
+
+        /* --- ВПРАВА З КАРТИНКАМИ (НОВА) --- */
+        .pic-exercise { margin-top: 20px; position: relative; }
+        
+        /* Sticky Bank */
+        .pic-bank-wrapper {
+            position: sticky;
+            top: 60px; /* Відступ від навігації */
+            z-index: 500;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 0;
+            border-bottom: 2px solid var(--gold);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .pic-bank { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; background: #fff9e6; border-radius: 10px; min-height: 50px; justify-content: center; max-height: 150px; overflow-y: auto; }
+        .pic-word { padding: 6px 12px; background: white; border: 2px solid var(--secondary); border-radius: 20px; cursor: grab; font-weight: 500; font-size: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); user-select: none; transition: 0.2s; }
+        .pic-word:hover { background: #f0f0f0; }
+        
+        .pic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        .pic-card { border: 1px solid #ddd; border-radius: 10px; padding: 10px; text-align: center; background: white; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: space-between; min-height: 200px; position: relative; }
+        .pic-card.drag-over { background: #e3f2fd; border-color: var(--blue); }
+        .pic-img { font-size: 50px; margin-bottom: 10px; } 
+        
+        .pic-dropzone { width: 100%; height: 40px; border: 2px dashed #ccc; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #888; margin-top: auto; }
+        .pic-dropzone.filled { border-style: solid; border-color: var(--success); background: #d4edda; color: #155724; font-weight: bold; }
+        .pic-dropzone.error { border-color: var(--primary); background: #f8d7da; color: #721c24; }
+
+        /* Режим тесту (4 варіанти) */
+        .test-options { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; width: 100%; margin-top: auto; }
+        .test-btn { padding: 8px; background: #f0f2f5; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; font-size: 13px; transition: 0.2s; }
+        .test-btn:hover { background: #e0e0e0; }
+        .test-btn.correct { background: var(--success); color: white; border-color: var(--success); }
+        .test-btn.wrong { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Перемикач режимів */
+        .mode-toggle { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
+        .mode-btn { padding: 10px 20px; border: 2px solid var(--secondary); background: white; border-radius: 20px; cursor: pointer; font-weight: bold; color: var(--secondary); transition: 0.3s; }
+        .mode-btn.active { background: var(--secondary); color: white; }
+
         /* Модальне вікно */
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; }
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; }
         .modal-content { background: white; width: 95%; max-width: 1100px; margin: 30px auto; padding: 25px; border-radius: 15px; height: 85vh; overflow-y: auto; position: relative; }
         .close-btn { position: absolute; right: 20px; top: 10px; font-size: 35px; cursor: pointer; color: #666; }
 
-        /* Таблиця вправи */
+        /* Таблиця дієслів */
         .word-bank { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; padding: 20px; background: #f0f2f5; border-radius: 10px; min-height: 60px; justify-content: center; }
         .word { padding: 8px 16px; background: white; border: 2px solid var(--primary); border-radius: 20px; cursor: grab; font-weight: 500; font-size: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .word.hidden { visibility: hidden; }
@@ -50,24 +140,49 @@
         .song-link:hover { text-decoration: underline; }
         .song-link:before { content: "🎬 "; }
 
-        /* Блок виклику */
         #challengeDisplay { margin-top: 20px; padding: 15px; background: #fff9e6; border: 2px dashed var(--gold); border-radius: 10px; display: none; text-align: center; font-size: 18px; font-weight: bold; color: #5d4037; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>IV Koniugacja: Повний довідник та тренажер</h1>
-<h2>До цієї групи належать дієслова, які в формі ja закінчуються на -em, а в формі ty на -esz. </h2>
-<p>Важливо: Не плутайте з I кон'югацією (-am, -asz). Тут ключова літера — E!</p>
-    <p>Ексклюзивна група дієслів на -em, -esz</p>
+<!-- Навігація та налаштування голосу -->
+<nav>
+    <div class="nav-container">
+        <div class="nav-links">
+            <a href="#theory">Теорія</a>
+            <a href="#conjugation">Дієслова</a>
+            <a href="#gender">Рід іменників</a>
+            <a href="#pictures">Підпиши малюнки</a>
+            <a href="#music">Музика</a>
+        </div>
+        <div class="voice-settings">
+            <label>🔊 Голос: 
+                <select id="voiceSelect"></select>
+            </label>
+            <label>Швидкість: 
+                <input type="range" id="rateRange" min="0.5" max="1.5" step="0.1" value="1">
+            </label>
+        </div>
+    </div>
+</nav>
 
+<header>
+    <h1>Польська мова: Довідник та Тренажери</h1>
+    <p>Інтерактивне вивчення з озвучкою</p>
 </header>
 
 <div class="container">
-    <div class="theory-box">
-        <h2>Повний список дієслів IV кон'югації</h2>
-        <p>Ця група унікальна — до неї входять лише 4 основні корені та їхні префіксальні форми:</p>
+    
+    <!-- СЕКЦІЯ 1: ТЕОРІЯ -->
+    <section id="theory">
+        <h2>1. Теорія: IV Koniugacja</h2>
+        <div class="theory-box">
+            <h3>Дієслова на -em, -esz</h3>
+            <p>До цієї групи належать дієслова, які в формі <strong>ja</strong> закінчуються на <span class="suffix">-em</span>, а в формі <strong>ty</strong> на <span class="suffix">-esz</span>.</p>
+            <p><em>Важливо:</em> Не плутайте з I кон'югацією (-am, -asz). Тут ключова літера — E!</p>
+        </div>
+        
+        <h3>Повний список дієслів IV кон'югації</h3>
         <div class="full-list-box">
             <strong>1. Jeść</strong> (та всі на <em>-jeść</em>: zjeść, dojeść, wyjeść, przejeść się)<br>
             <strong>2. Wiedzieć</strong> (та всі на <em>-wiedzieć</em>: powiedzieć, odpowiedzieć, opowiedzieć, dowiedzieć się)<br>
@@ -75,48 +190,159 @@
             <strong>4. Rozumieć</strong> (розуміти та зрозуміти - zrozumieć)<br>
             <strong>5. Śmieć</strong> (сміти/наважуватися)
         </div>
-    </div>
+    </section>
 
-    <h3>Оберіть дієслова для вправи:</h3>
-    <div class="verb-selection" id="verbSelect">
-        <label class="verb-item"><input type="checkbox" value="jeść" checked> <strong>jeść</strong></label>
-        <label class="verb-item"><input type="checkbox" value="wiedzieć" checked> <strong>wiedzieć</strong></label>
-        <label class="verb-item"><input type="checkbox" value="umieć" checked> <strong>umieć</strong></label>
-        <label class="verb-item"><input type="checkbox" value="rozumieć" checked> <strong>rozumieć</strong></label>
-        <label class="verb-item"><input type="checkbox" value="zjeść"> zjeść</label>
-        <label class="verb-item"><input type="checkbox" value="powiedzieć"> powiedzieć</label>
-        <label class="verb-item"><input type="checkbox" value="opowiedzieć"> opowiedzieć</label>
-        <label class="verb-item"><input type="checkbox" value="śmieć"> śmieć</label>
-    </div>
+    <!-- СЕКЦІЯ 2: ТРЕНАЖЕР ДІЄСЛІВ -->
+    <section id="conjugation">
+        <h2>2. Тренажер дієслів</h2>
+        <h3>Оберіть дієслова для вправи:</h3>
+        <div class="verb-selection" id="verbSelect">
+            <label class="verb-item"><input type="checkbox" value="jeść" checked> <strong>jeść</strong></label>
+            <label class="verb-item"><input type="checkbox" value="wiedzieć" checked> <strong>wiedzieć</strong></label>
+            <label class="verb-item"><input type="checkbox" value="umieć" checked> <strong>umieć</strong></label>
+            <label class="verb-item"><input type="checkbox" value="rozumieć" checked> <strong>rozumieć</strong></label>
+            <label class="verb-item"><input type="checkbox" value="zjeść"> zjeść</label>
+            <label class="verb-item"><input type="checkbox" value="powiedzieć"> powiedzieć</label>
+            <label class="verb-item"><input type="checkbox" value="opowiedzieć"> opowiedzieć</label>
+            <label class="verb-item"><input type="checkbox" value="śmieć"> śmieć</label>
+        </div>
 
-    <div class="btn-group">
-        <button class="btn-main" onclick="openExercise()">Почати обрану вправу →</button>
-        <button class="btn-random" onclick="randomExercise()">🎲 Випадкові 1-4 дієслова</button>
-        <button class="btn-challenge" onclick="generateChallenge()">🔥 Виклик-завдання</button>
-    </div>
+        <div class="btn-group">
+            <button class="btn-main" onclick="openExercise()">Почати обрану вправу →</button>
+            <button class="btn-random" onclick="randomExercise()">🎲 Випадкові 1-4 дієслова</button>
+            <button class="btn-challenge" onclick="generateChallenge()">🔥 Виклик-завдання</button>
+        </div>
 
-    <div id="challengeDisplay"></div>
+        <div id="challengeDisplay"></div>
+    </section>
 
-    <div class="music-section">
-        <h3>🎧 Навчання через музику (Працюючі посилання):</h3>
-        <a href="https://www.youtube.com/watch?v=ZuHakRzq5yE" target="_blank" class="song-link">Mrozu - Nic do stracenia (слухайте слово "wiem")</a>
-        <a href="https://www.youtube.com/watch?v=n3Hv-1MWz2Y" target="_blank" class="song-link">Enej - Skrzydlate ręce (дієслова в тексті)</a>
-        <a href="https://www.youtube.com/watch?v=hHb3owr6PQg" target="_blank" class="song-link">Sanah - Ale jazz! (занурення в мову)</a>
-        <a href="https://www.youtube.com/watch?v=nTc_PBik_nU" target="_blank" class="song-link">Perfect - Chciałbym być sobą (слухайте "Nie umiem...")</a>
-        <a href="https://www.youtube.com/watch?v=I8NcELiIMHg" target="_blank" class="song-link">Kult - Gdy nie ma dzieci (слухайте "Jemy...")</a>
-    </div>
+    <!-- СЕКЦІЯ 3: РІД ІМЕННИКІВ -->
+    <section id="gender">
+        <h2>3. Інтерактивна вправа: Рід іменників</h2>
+        <p>Перетягніть слова зі списку у відповідну колонку. Натисніть на слово, щоб почути його вимову.</p>
+        
+        <div class="gender-exercise">
+            <div class="gender-bank" id="genderBank">
+                <!-- Слова генеруються скриптом -->
+            </div>
+            
+            <div class="gender-grid">
+                <div class="gender-col">
+                    <div class="gender-header header-m">Rodzaj męski (Чоловічий)</div>
+                    <div class="gender-dropzone" id="zone-m" ondrop="dropGender(event)" ondragover="allowDrop(event)" data-gender="m"></div>
+                </div>
+                <div class="gender-col">
+                    <div class="gender-header header-f">Rodzaj żeński (Жіночий)</div>
+                    <div class="gender-dropzone" id="zone-f" ondrop="dropGender(event)" ondragover="allowDrop(event)" data-gender="f"></div>
+                </div>
+                <div class="gender-col">
+                    <div class="gender-header header-n">Rodzaj nijaki (Середній)</div>
+                    <div class="gender-dropzone" id="zone-n" ondrop="dropGender(event)" ondragover="allowDrop(event)" data-gender="n"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- СЕКЦІЯ 4: ПІДПИШИ МАЛЮНКИ (ОНОВЛЕНО) -->
+    <section id="pictures">
+        <h2>4. Вправа: Підпиши малюнки</h2>
+        <p>Оберіть режим: перетягування слів або тест з 4 варіантів.</p>
+        
+        <div class="mode-toggle">
+            <button class="mode-btn active" id="modeDrag" onclick="setPictureMode('drag')">🖐️ Перетягування</button>
+            <button class="mode-btn" id="modeTest" onclick="setPictureMode('test')">📝 Тест (4 слова)</button>
+        </div>
+
+        <div class="pic-exercise">
+            <!-- Sticky Bank -->
+            <div class="pic-bank-wrapper" id="picBankWrapper">
+                <div class="pic-bank" id="picBank">
+                    <!-- Слова генеруються скриптом -->
+                </div>
+            </div>
+            
+            <div class="pic-grid" id="picGrid">
+                <!-- Картки з малюнками генеруються скриптом -->
+            </div>
+        </div>
+    </section>
+
+    <!-- СЕКЦІЯ 5: МУЗИКА -->
+    <section id="music">
+        <h2>5. Навчання через музику</h2>
+        <div class="music-section">
+            <a href="https://www.youtube.com/watch?v=ZuHakRzq5yE" target="_blank" class="song-link">Mrozu - Nic do stracenia (слухайте слово "wiem")</a>
+            <a href="https://www.youtube.com/watch?v=n3Hv-1MWz2Y" target="_blank" class="song-link">Enej - Skrzydlate ręce (дієслова в тексті)</a>
+            <a href="https://www.youtube.com/watch?v=hHb3owr6PQg" target="_blank" class="song-link">Sanah - Ale jazz! (занурення в мову)</a>
+            <a href="https://www.youtube.com/watch?v=nTc_PBik_nU" target="_blank" class="song-link">Perfect - Chciałbym być sobą (слухайте "Nie umiem...")</a>
+            <a href="https://www.youtube.com/watch?v=I8NcELiIMHg" target="_blank" class="song-link">Kult - Gdy nie ma dzieci (слухайте "Jemy...")</a>
+        </div>
+    </section>
 </div>
 
+<!-- Модальне вікно для дієслів -->
 <div id="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeExercise()">&times;</span>
-        <h2 id="modalTitle">Тренажер</h2>
+        <h2 id="modalTitle">Тренажер дієслів</h2>
         <div class="word-bank" id="wordBank"></div>
         <div id="tableContainer" style="overflow-x: auto;"></div>
     </div>
 </div>
 
 <script>
+    // --- 1. НАЛАШТУВАННЯ ГОЛОСУ ---
+    const voiceSelect = document.getElementById('voiceSelect');
+    const rateRange = document.getElementById('rateRange');
+    let voices = [];
+    let selectedVoice = null;
+
+    function populateVoiceList() {
+        voices = window.speechSynthesis.getVoices();
+        voiceSelect.innerHTML = '';
+        
+        let plVoices = voices.filter(v => v.lang.includes('pl'));
+        let otherVoices = voices.filter(v => !v.lang.includes('pl'));
+        let displayVoices = [...plVoices, ...otherVoices];
+
+        displayVoices.forEach((voice) => {
+            const option = document.createElement('option');
+            option.textContent = `${voice.name} (${voice.lang})`;
+            option.value = voice.name;
+            
+            if (voice.name.includes('Google') && voice.lang.includes('pl')) {
+                option.selected = true;
+                selectedVoice = voice;
+            }
+            voiceSelect.appendChild(option);
+        });
+
+        if (!selectedVoice && plVoices.length > 0) {
+            selectedVoice = plVoices[0];
+            voiceSelect.value = selectedVoice.name;
+        }
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = populateVoiceList;
+    }
+    populateVoiceList();
+
+    voiceSelect.onchange = () => {
+        selectedVoice = voices.find(v => v.name === voiceSelect.value);
+    };
+
+    function speak(text) {
+        if (!text) return;
+        window.speechSynthesis.cancel();
+        const ut = new SpeechSynthesisUtterance(text);
+        ut.lang = 'pl-PL';
+        if (selectedVoice) ut.voice = selectedVoice;
+        ut.rate = parseFloat(rateRange.value);
+        window.speechSynthesis.speak(ut);
+    }
+
+    // --- 2. ЛОГІКА ДІЄСЛІВ ---
     const verbsDB = {
         'jeść': ['jem', 'jesz', 'je', 'jemy', 'jecie', 'jedzą'],
         'wiedzieć': ['wiem', 'wiesz', 'wie', 'wiemy', 'wiecie', 'wiedzą'],
@@ -125,16 +351,10 @@
         'opowiedzieć': ['opowiem', 'opowiesz', 'opowie', 'opowiemy', 'opowiecie', 'opowiedzą'],
         'umieć': ['umiem', 'umiesz', 'umie', 'umiemy', 'umiecie', 'umieją'],
         'rozumieć': ['rozumiem', 'rozumiesz', 'rozumie', 'rozumiemy', 'rozumiecie', 'rozumieją'],
-        'śmieć': ['śmiem', 'шmiesz', 'śmie', 'śmiemy', 'śmiecie', 'śmieją']
+        'śmieć': ['śmiem', 'śmiesz', 'śmie', 'śmiemy', 'śmiecie', 'śmieją']
     };
     const pronouns = ['ja', 'ty', 'on/ona/ono', 'my', 'wy', 'oni/one'];
     const ukrPronouns = ['я', 'ти', 'він/вона/воно', 'ми', 'ви', 'вони'];
-
-    function speak(text) {
-        const ut = new SpeechSynthesisUtterance(text);
-        ut.lang = 'pl-PL';
-        window.speechSynthesis.speak(ut);
-    }
 
     function openExercise(specificVerbs = null) {
         let verbs = specificVerbs || Array.from(document.querySelectorAll('#verbSelect input:checked')).map(i => i.value);
@@ -159,7 +379,7 @@
             verbs.forEach(v => {
                 const correct = verbsDB[v][pIdx];
                 allWords.push(correct);
-                html += `<td><div class="drop-zone" data-ans="${correct}" ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>`;
+                html += `<td><div class="drop-zone" data-ans="${correct}" ondrop="dropVerb(event)" ondragover="allowDrop(event)"></div></td>`;
             });
             html += `</tr>`;
         });
@@ -177,7 +397,8 @@
     }
 
     function allowDrop(ev) { ev.preventDefault(); }
-    function drop(ev) {
+
+    function dropVerb(ev) {
         ev.preventDefault();
         const id = ev.dataTransfer.getData("text");
         const el = document.getElementById(id);
@@ -209,8 +430,335 @@
         const display = document.getElementById('challengeDisplay');
         display.style.display = 'block';
         display.innerHTML = `🔥 ЗАВДАННЯ: Склади речення з формою "${pronouns[pIdx]}" (${ukrPronouns[pIdx]}) для дієслова "${verb}"!`;
-        speak(`Jak powiesz: ${pronouns[pIdx]} і дієслово ${verb}?`);
+        speak(`Jak powiesz: ${pronouns[pIdx]} i czasownik ${verb}?`);
     }
+
+    // --- 3. ЛОГІКА ВПРАВИ "РІД ІМЕННИКІВ" ---
+    const nounsData = [
+        { word: 'chłopak', gender: 'm' }, { word: 'dziewczyna', gender: 'f' },
+        { word: 'klasa', gender: 'f' }, { word: 'pani', gender: 'f' },
+        { word: 'rower', gender: 'm' }, { word: 'jabłko', gender: 'n' },
+        { word: 'telefon', gender: 'm' }, { word: 'program', gender: 'm' },
+        { word: 'radio', gender: 'n' }, { word: 'komputer', gender: 'm' },
+        { word: 'problem', gender: 'm' }, { word: 'mieszkanie', gender: 'n' },
+        { word: 'imię', gender: 'n' }, { word: 'nazwisko', gender: 'n' },
+        { word: 'zupa', gender: 'f' }, { word: 'kolega', gender: 'm' },
+        { word: 'marchew', gender: 'f' }, { word: 'uczeń', gender: 'm' },
+        { word: 'koleżanka', gender: 'f' }, { word: 'herbata', gender: 'f' },
+        { word: 'zeszyt', gender: 'm' }, { word: 'sklep', gender: 'm' },
+        { word: 'dziecko', gender: 'n' }, { word: 'grupa', gender: 'f' },
+        { word: 'muzeum', gender: 'n' }, { word: 'dom', gender: 'm' },
+        { word: 'gimnazjum', gender: 'n' }, { word: 'artysta', gender: 'm' },
+        { word: 'artystka', gender: 'f' }, { word: 'liceum', gender: 'n' },
+        { word: 'pies', gender: 'm' }, { word: 'pieniądz', gender: 'm' },
+        { word: 'uczennica', gender: 'f' }, { word: 'morze', gender: 'n' },
+        { word: 'noc', gender: 'f' }, { word: 'akwarium', gender: 'n' }
+    ];
+
+    function initGenderExercise() {
+        const bank = document.getElementById('genderBank');
+        bank.innerHTML = '';
+        
+        const shuffled = [...nounsData].sort(() => Math.random() - 0.5);
+
+        shuffled.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'gender-word';
+            div.draggable = true;
+            div.id = `g-${index}`;
+            div.textContent = item.word;
+            div.dataset.gender = item.gender;
+            
+            div.onclick = () => speak(item.word);
+            
+            div.ondragstart = (e) => {
+                e.dataTransfer.setData("text", e.target.id);
+                e.dataTransfer.effectAllowed = "move";
+            };
+            
+            bank.appendChild(div);
+        });
+    }
+
+    function dropGender(ev) {
+        ev.preventDefault();
+        const id = ev.dataTransfer.getData("text");
+        const el = document.getElementById(id);
+        const zone = ev.target.closest('.gender-dropzone');
+        
+        if (!zone) return;
+
+        const correctGender = el.dataset.gender;
+        const targetGender = zone.dataset.gender;
+
+        const newItem = document.createElement('div');
+        newItem.className = 'dropped-item';
+        newItem.textContent = el.textContent;
+        
+        if (correctGender === targetGender) {
+            newItem.classList.add('correct');
+            speak(el.textContent);
+            el.remove();
+        } else {
+            newItem.classList.add('wrong');
+            setTimeout(() => {
+                newItem.remove();
+            }, 1000);
+        }
+        
+        zone.appendChild(newItem);
+    }
+
+    // --- 4. ЛОГІКА ВПРАВИ "ПІДПИШИ МАЛЮНКИ" (ОНОВЛЕНО) ---
+    const pictureData = [
+        { 
+    id: 0, 
+    word: 'fartuch', 
+    emoji: `<svg viewBox="0 0 100 100" style="width:60px; height:60px;">
+        <!-- Задня частина зав'язки на шиї -->
+        <path d="M38,22 Q50,15 62,22" stroke="#a52a2a" stroke-width="3" fill="none"/>
+        
+        <!-- Основна частина фартуха -->
+        <path d="M30,30 Q50,35 70,30 L75,80 Q50,88 25,80 Z" fill="#fff" stroke="#333" stroke-width="2"/>
+        
+        <!-- Верхня окантовка (нагрудна частина) -->
+        <path d="M35,22 L38,35 Q50,40 62,35 L65,22 Q50,28 35,22 Z" fill="#fff" stroke="#333" stroke-width="2"/>
+        
+        <!-- Бічні зав'язки (стрічки) -->
+        <path d="M25,45 Q10,50 15,65 Q20,75 10,80" stroke="#a52a2a" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M75,45 Q90,50 85,65 Q80,75 90,80" stroke="#a52a2a" stroke-width="3" fill="none" stroke-linecap="round"/>
+        
+        <!-- Кишеня -->
+        <path d="M40,60 L60,60 L58,75 Q50,78 42,75 Z" fill="none" stroke="#333" stroke-width="2"/>
+        
+        <!-- Нижня червона окантовка (хвиляста) -->
+        <path d="M25,80 Q50,88 75,80 Q75,84 73,86 Q50,94 27,86 Q25,84 25,80 Z" fill="#a52a2a" stroke="#333" stroke-width="1.5"/>
+        
+        <!-- Лінія згину зверху -->
+        <path d="M38,25 Q50,32 62,25" stroke="#333" stroke-width="1.5" fill="none"/>
+    </svg>`, 
+    hint: 'Фартух' 
+},
+        { id: 1, word: 'koszulka', emoji: '👕', hint: 'Футболка' },
+        { 
+    id: 2, 
+    word: 'smycz', 
+    emoji: `<svg viewBox="0 0 100 100" style="width:60px; height:60px;">
+        <!-- Основна зелена стрічка (петля) -->
+        <path d="M25,75 Q20,60 35,50 Q55,40 70,45 Q85,50 80,65 Q75,75 60,75 Q45,75 40,65 Q35,55 50,50 Q65,45 75,50" 
+              fill="none" stroke="#5cb85c" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        
+        <!-- Контур стрічки (чорний) -->
+        <path d="M25,75 Q20,60 35,50 Q55,40 70,45 Q85,50 80,65 Q75,75 60,75 Q45,75 40,65 Q35,55 50,50 Q65,45 75,50" 
+              fill="none" stroke="#333" stroke-width="1.5"/>
+        
+        <!-- Карабін (металевий гачок) -->
+        <rect x="15" y="72" width="12" height="8" rx="2" fill="#bdc3c7" stroke="#333" stroke-width="1.5"/>
+        <path d="M15,76 Q8,76 8,81 Q8,86 15,86" fill="none" stroke="#333" stroke-width="2"/>
+        <circle cx="8" cy="81" r="2.5" fill="#95a5a6" stroke="#333" stroke-width="1"/>
+        
+        <!-- Кільце кріплення стрічки до карабіна -->
+        <rect x="25" y="70" width="6" height="12" rx="1" fill="#95a5a6" stroke="#333" stroke-width="1.5"/>
+    </svg>`, 
+    hint: 'Повідець' 
+},
+        { id: 3, word: 'lusterko', emoji: '🪞', hint: 'Дзеркальце' },
+        { id: 4, word: 'pióro', emoji: '🖊️', hint: 'Перо' },
+        { id: 5, word: 'mapa', emoji: '🗺️', hint: 'Карта' },
+        { id: 6, word: 'filiżanka', emoji: '☕', hint: 'Чашка' },
+        { id: 7, word: 'kubek', emoji: '🥛', hint: 'Кухоль' },
+        { id: 8, word: 'torba', emoji: '👜', hint: 'Сумка' },
+        { id: 9, word: 'obraz', emoji: '🖼️', hint: 'Картина' },
+        { id: 10, word: 'muszla', emoji: '🐚', hint: 'Мушля' },
+        { id: 11, word: 'bursztyn', emoji: '🟠', hint: 'Бурштин' },
+        { 
+    id: 12, 
+    word: 'maskotka', 
+    emoji: `<svg viewBox="0 0 100 100" style="width:60px; height:60px;">
+        <!-- Тіло дракончика -->
+        <ellipse cx="50" cy="60" rx="22" ry="25" fill="#7cb342" stroke="#333" stroke-width="1.5"/>
+        
+        <!-- Живіт (світліший) -->
+        <ellipse cx="50" cy="65" rx="14" ry="15" fill="#aed581" stroke="#333" stroke-width="1"/>
+        
+        <!-- Голова -->
+        <circle cx="50" cy="32" r="18" fill="#7cb342" stroke="#333" stroke-width="1.5"/>
+        
+        <!-- Мордочка -->
+        <ellipse cx="50" cy="38" rx="10" ry="8" fill="#aed581" stroke="#333" stroke-width="1"/>
+        
+        <!-- Очі -->
+        <circle cx="43" cy="28" r="4" fill="#fff" stroke="#333" stroke-width="1"/>
+        <circle cx="57" cy="28" r="4" fill="#fff" stroke="#333" stroke-width="1"/>
+        <circle cx="44" cy="29" r="2" fill="#333"/>
+        <circle cx="58" cy="29" r="2" fill="#333"/>
+        
+        <!-- Усмішка -->
+        <path d="M45,38 Q50,42 55,38" fill="none" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+        
+        <!-- Ніздрі -->
+        <circle cx="48" cy="36" r="0.8" fill="#333"/>
+        <circle cx="52" cy="36" r="0.8" fill="#333"/>
+        
+        <!-- Ріжки -->
+        <path d="M40,18 L38,10 L44,15 Z" fill="#558b2f" stroke="#333" stroke-width="1"/>
+        <path d="M60,18 L62,10 L56,15 Z" fill="#558b2f" stroke="#333" stroke-width="1"/>
+        
+        <!-- Гребінець на спині -->
+        <path d="M50,14 L52,8 L54,14" fill="#558b2f" stroke="#333" stroke-width="1"/>
+        
+        <!-- Крильця -->
+        <path d="M28,55 Q18,50 22,62 Q26,68 30,65" fill="#8bc34a" stroke="#333" stroke-width="1.5"/>
+        <path d="M72,55 Q82,50 78,62 Q74,68 70,65" fill="#8bc34a" stroke="#333" stroke-width="1.5"/>
+        
+        <!-- Лапки -->
+        <ellipse cx="42" cy="85" rx="6" ry="4" fill="#7cb342" stroke="#333" stroke-width="1.5"/>
+        <ellipse cx="58" cy="85" rx="6" ry="4" fill="#7cb342" stroke="#333" stroke-width="1.5"/>
+        
+        <!-- Пальчики на лапках -->
+        <line x1="39" y1="85" x2="39" y2="88" stroke="#333" stroke-width="1"/>
+        <line x1="42" y1="85" x2="42" y2="88" stroke="#333" stroke-width="1"/>
+        <line x1="45" y1="85" x2="45" y2="88" stroke="#333" stroke-width="1"/>
+        <line x1="55" y1="85" x2="55" y2="88" stroke="#333" stroke-width="1"/>
+        <line x1="58" y1="85" x2="58" y2="88" stroke="#333" stroke-width="1"/>
+        <line x1="61" y1="85" x2="61" y2="88" stroke="#333" stroke-width="1"/>
+        
+        <!-- Хвостик -->
+        <path d="M72,80 Q85,78 88,70 Q82,72 78,75" fill="#7cb342" stroke="#333" stroke-width="1.5"/>
+    </svg>`, 
+    hint: 'Талісман (дракончик)' 
+},
+        { id: 13, word: 'miecz', emoji: '⚔️', hint: 'Меч' },
+        { id: 14, word: 'pudełko', emoji: '📦', hint: 'Коробка' },
+        { id: 15, word: 'oscypek', emoji: '🧀', hint: 'Осципек (сир)' },
+        { id: 16, word: 'kapelusz', emoji: '🎩', hint: 'Капелюх' },
+        { id: 17, word: 'mydełko', emoji: '🧼', hint: 'Мильце' },
+        { id: 18, word: 'parasol', emoji: '☂️', hint: 'Парасолька' },
+        { id: 19, word: 'auto', emoji: '🚗', hint: 'Авто' },
+        { id: 20, word: 'dzwonek', emoji: '🔔', hint: 'Дзвіночок' },
+        { id: 21, word: 'mydełko', emoji: '🧼', hint: 'Мило' },
+        { id: 22, word: 'magnes', emoji: '🧲', hint: 'Магніт' },
+        { id: 23, word: 'chusta', emoji: '🧣', hint: 'Хустка' }
+    ];
+
+    let currentPicMode = 'drag'; // 'drag' або 'test'
+
+    function setPictureMode(mode) {
+        currentPicMode = mode;
+        document.getElementById('modeDrag').classList.toggle('active', mode === 'drag');
+        document.getElementById('modeTest').classList.toggle('active', mode === 'test');
+        
+        // Показати/приховати банк слів
+        document.getElementById('picBankWrapper').style.display = mode === 'drag' ? 'block' : 'none';
+        
+        initPictureExercise();
+    }
+
+    function initPictureExercise() {
+        const bank = document.getElementById('picBank');
+        const grid = document.getElementById('picGrid');
+        
+        if (currentPicMode === 'drag') {
+            bank.innerHTML = '';
+            const shuffledWords = [...pictureData].sort(() => Math.random() - 0.5);
+            shuffledWords.forEach((item) => {
+                const div = document.createElement('div');
+                div.className = 'pic-word';
+                div.draggable = true;
+                div.id = `pw-${item.id}`;
+                div.textContent = item.word;
+                div.dataset.word = item.word;
+                
+                div.onclick = () => speak(item.word);
+                div.ondragstart = (e) => {
+                    e.dataTransfer.setData("text", e.target.id);
+                    e.dataTransfer.effectAllowed = "move";
+                };
+                bank.appendChild(div);
+            });
+        }
+
+        grid.innerHTML = '';
+        pictureData.forEach((item) => {
+            const card = document.createElement('div');
+            card.className = 'pic-card';
+            
+            let contentHTML = `
+                <div class="pic-img">${item.emoji}</div>
+            `;
+
+            if (currentPicMode === 'drag') {
+                contentHTML += `
+                    <div class="pic-dropzone" ondrop="dropPicture(event)" ondragover="allowDrop(event)" data-answer="${item.word}">
+                        ${item.id + 1}.
+                    </div>
+                `;
+            } else {
+                // Режим тесту: генеруємо 4 варіанти
+                let options = [item.word];
+                while(options.length < 4) {
+                    let randomWord = pictureData[Math.floor(Math.random() * pictureData.length)].word;
+                    if(!options.includes(randomWord)) options.push(randomWord);
+                }
+                options.sort(() => Math.random() - 0.5);
+
+                contentHTML += `<div class="test-options">`;
+                options.forEach(opt => {
+                    contentHTML += `<button class="test-btn" onclick="checkTestAnswer(this, '${opt}', '${item.word}')">${opt}</button>`;
+                });
+                contentHTML += `</div>`;
+            }
+
+            card.innerHTML = contentHTML;
+            grid.appendChild(card);
+        });
+    }
+
+    function dropPicture(ev) {
+        ev.preventDefault();
+        const id = ev.dataTransfer.getData("text");
+        const el = document.getElementById(id);
+        const zone = ev.target.closest('.pic-dropzone');
+        
+        if (!zone || zone.classList.contains('filled')) return;
+
+        const correctAnswer = zone.dataset.answer;
+        
+        if (el.dataset.word === correctAnswer) {
+            zone.textContent = correctAnswer;
+            zone.classList.add('filled');
+            speak(correctAnswer);
+            el.remove();
+        } else {
+            zone.classList.add('error');
+            setTimeout(() => zone.classList.remove('error'), 600);
+        }
+    }
+
+    function checkTestAnswer(btn, selected, correct) {
+        if (btn.classList.contains('correct') || btn.classList.contains('wrong')) return;
+
+        if (selected === correct) {
+            btn.classList.add('correct');
+            speak(correct);
+            // Блокуємо інші кнопки в цьому блоці
+            const parent = btn.parentElement;
+            Array.from(parent.children).forEach(child => {
+                if (child !== btn) child.disabled = true;
+            });
+        } else {
+            btn.classList.add('wrong');
+            btn.disabled = true;
+        }
+    }
+
+    // Ініціалізація всіх вправ
+    window.onload = () => {
+        initGenderExercise();
+        initPictureExercise();
+        setTimeout(populateVoiceList, 500); 
+    };
+
 </script>
 
 </body>
